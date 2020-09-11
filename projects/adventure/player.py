@@ -1,11 +1,17 @@
 # An incomplete list of directions. Your task is to fill this with valid traversal directions.
+from util import Queue
+
+from world import World
 from graph import Graph
-from util import Stack, Queue
+
+
 class Player:
     graph = Graph()
+
     def __init__(self, starting_room):
         self.current_room = starting_room
-    def travel(self, direction, show_rooms = False):
+
+    def travel(self, direction, show_rooms=False):
         next_room = self.current_room.get_room_in_direction(direction)
         if next_room is not None:
             self.current_room = next_room
@@ -19,7 +25,8 @@ class Player:
         # create a list to return when done
         direction = self.current_room.get_exits()[0]
         visited = {}
-        path = self.check_all_rooms(starting_room, direction, visited)
+        print(f"start is {starting_room}")
+        path = self.check_all_rooms(direction, visited)
         return path
 
     # def dft(self, starting_room, visited=None):
@@ -52,13 +59,16 @@ class Player:
         # now that we have gone as far north as we can we should do bft and enqueue all of the neighbors
         # of the rooms we are in.
         return rooms
+
     # recursive method that will create a dict for a room and
-    def check_all_rooms(self, previous_room, direction, visited, rooms = None):
+    def check_all_rooms(self, direction, visited, previous_room = None, rooms=None):
+        # bread_crumb is used to look back when updating the room dict
         bread_crumb = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
         if rooms == None:
             rooms = []
-        rooms.append(direction)
-        self.travel(direction)
+        if previous_room != None:
+            rooms.append(direction)
+            self.travel(direction)
         print(f"current room id is {self.current_room.id}")
         #     queue = Queue()
         # queue.enqueue(previous_room)
@@ -69,12 +79,15 @@ class Player:
             visited[room_number] = {}
             exits = self.current_room.get_exits()
             for exit in exits:
-                if exit == direction:
-                    visited[room_number][exit] = previous_room.id
-                else:
-                    visited[room_number][exit] = '?'
+                visited[room_number][exit] = '?'
                 print(f"exit for room {room_number} is {exit}")
                 print(visited)
-
-
+            if previous_room != None:
+                print(f"pre is {previous_room}")
+                visited[previous_room][direction] = room_number
+                visited[room_number][bread_crumb[direction]] = previous_room
+        for dir in visited[room_number]:
+            print(f"hi {visited[room_number][dir]}")
+            if visited[room_number][dir] == '?':
+                self.check_all_rooms(dir, visited, room_number, rooms)
         return rooms

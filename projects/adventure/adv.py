@@ -29,8 +29,6 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n'] # this input will pass the straight line tests
 traversal_path = player.clear_fog(world.starting_room)
 
-
-
 # TRAVERSAL TEST
 visited_rooms = set()
 player.current_room = world.starting_room
