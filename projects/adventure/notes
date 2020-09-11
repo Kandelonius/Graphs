@@ -1,0 +1,4 @@
+1) first we start in room 0 and our room number prints out as well as a tuple and a print out of the exits.
+    - the tuple refers to the description doesn't appear to have a purpose aside from general coordinates.
+2) create traversal instructions while we haven't visited all of the rooms, search rooms.
+3) looking for
