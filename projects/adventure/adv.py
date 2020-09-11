@@ -1,25 +1,22 @@
-from room import Room
+from ast import literal_eval
+
 from player import Player
 from world import World
-
-import random
-from ast import literal_eval
 
 # Load world
 world = World()
 
-
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
+# map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
-room_graph=literal_eval(open(map_file, "r").read())
+room_graph = literal_eval(open(map_file, "r").read())
 world.load_graph(room_graph)
-
+print(len(room_graph))
 # Print an ASCII map
 world.print_rooms()
 
@@ -27,7 +24,8 @@ player = Player(world.starting_room)
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n'] # this input will pass the straight line tests
-traversal_path = player.clear_fog(world.starting_room)
+goal_num = len(room_graph)
+traversal_path = player.clear_fog(world.starting_room, goal_num)
 
 # TRAVERSAL TEST
 visited_rooms = set()
@@ -43,8 +41,6 @@ if len(visited_rooms) == len(room_graph):
 else:
     print("TESTS FAILED: INCOMPLETE TRAVERSAL")
     print(f"{len(room_graph) - len(visited_rooms)} unvisited rooms")
-
-
 
 #######
 # UNCOMMENT TO WALK AROUND
